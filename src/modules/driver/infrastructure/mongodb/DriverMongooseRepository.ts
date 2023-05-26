@@ -1,12 +1,14 @@
+import { Criteria } from "../../../shared/criteria/domain/Criteria";
 import { Driver } from "../../domain/Driver";
 import { DriverFilter } from "../../domain/DriverGetterFilter";
 import { DriverRepository } from "../../domain/DriverRepository";
 import { DriverModel } from "./DriverModel";
 
 export class DriverMongooseRepository implements DriverRepository {
-  async getBy(filter: Partial<DriverFilter>): Promise<Driver[]> {
+  async getBy(criteria: Criteria): Promise<Driver[]> {
+    const filter = criteria.filter.value as DriverFilter
     if (!filter.nearest) {
-      const data = await DriverModel.find(filter).lean();
+      const data = await DriverModel.find(filter).limit(criteria.limit).lean();
       return data.map((item) => new Driver({
         ...item,
         location: {
@@ -28,7 +30,9 @@ export class DriverMongooseRepository implements DriverRepository {
           $maxDistance: maxDistanceInMeters || 3000
         }
       }
-    }).lean();
+    })
+      .limit(criteria.limit)
+      .lean();
 
     return data.map((item) => new Driver({
       ...item,

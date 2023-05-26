@@ -22,7 +22,8 @@ export class PassengerController {
   async drivers(req: Request, res: Response) {
     const getter = new AvailableDriversGetter(new DriverMongooseRepository());
     const { latitude, longitude } = req.query;
-    const drivers = await getter.run({ latitude: Number(latitude), longitude: Number(longitude) });
+    const limit = 3;
+    const drivers = await getter.run({ latitude: Number(latitude), longitude: Number(longitude), limit });
     res.status(200).json(drivers);
   }
 }
