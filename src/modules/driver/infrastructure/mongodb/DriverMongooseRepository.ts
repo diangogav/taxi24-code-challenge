@@ -37,10 +37,10 @@ export class DriverMongooseRepository implements DriverRepository {
 
     return data.map((item) => new Driver({
       ...item,
-      location: {
+      location: new Location({
         latitude: item.coordinates[1],
         longitude: item.coordinates[0]
-      }
+      })
     }))
   }
   async find(id: string): Promise<Driver | null> {

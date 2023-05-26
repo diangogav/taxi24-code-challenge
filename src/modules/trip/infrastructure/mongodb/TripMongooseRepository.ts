@@ -1,4 +1,5 @@
 import { Criteria } from "../../../shared/criteria/domain/Criteria";
+import { Location } from "../../../shared/location/domain/Location";
 import { Trip } from "../../domain/Trip";
 import { TripRepository } from "../../domain/TripRepository";
 import { TripModel } from "./TripModel";
@@ -10,13 +11,21 @@ export class TripMongooseRepository implements TripRepository {
       .limit(criteria.limit)
       .lean();
 
-    return data.map((item) => new Trip(item));
+    return data.map((item) => new Trip({
+      ...item,
+      startLocation: new Location(item.startLocation),
+      endLocation: item?.endLocation && new Location(item.endLocation),
+    }));
   }
 
   async find(tripId: string): Promise<Trip | null> {
     const data = await TripModel.findOne({ id: tripId }).lean();
     if (!data) { return null }
-    return new Trip(data);
+    return new Trip({
+      ...data,
+      startLocation: new Location(data.startLocation),
+      endLocation: data?.endLocation && new Location(data.endLocation),
+    });
   }
 
   async updateOne(trip: Trip): Promise<void> {
