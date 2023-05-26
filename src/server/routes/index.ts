@@ -15,5 +15,6 @@ export function loadRoutes(app: Express): void {
   app.get("/passengers/:id/drivers", (req, res) => new PassengerController().drivers(req, res))
 
   app.post("/trips", (req, res) => new TripController().create(req, res))
+  app.get("/trips", (req, res) => new TripController().get(req, res))
   app.put("/trips/:id/complete", (req, res) => new TripController().complete(req, res))
 }

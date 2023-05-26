@@ -6,6 +6,7 @@ import { DriverMongooseRepository } from "../../driver/infrastructure/mongodb/Dr
 import { PassengerFinder } from "../../passenger/application/PassengerFinder";
 import { PassengerMongooseRepository } from "../../passenger/infrastructure/mongodb/PassengerMongooseRepository";
 import { TripCompleter } from "../application/TripCompleter";
+import { TripGetter } from "../application/TripGetter";
 
 export class TripController {
   async create(req: Request, res: Response) {
@@ -25,5 +26,13 @@ export class TripController {
     const completer = new TripCompleter(new TripMongooseRepository());
     await completer.run({ tripId: id, latitude, longitude });
     res.status(200).json({});
+  }
+
+  async get(req: Request, res: Response) {
+    const { status } = req.query;
+    const getter = new TripGetter(new TripMongooseRepository());
+    const trips = await getter.run({ status: status as string });
+    res.status(200).json(trips);
+
   }
 }
