@@ -1,4 +1,5 @@
 import { Criteria } from "../../../shared/criteria/domain/Criteria";
+import { Location } from "../../../shared/location/domain/Location";
 import { Driver } from "../../domain/Driver";
 import { DriverFilter } from "../../domain/DriverGetterFilter";
 import { DriverRepository } from "../../domain/DriverRepository";
@@ -11,10 +12,10 @@ export class DriverMongooseRepository implements DriverRepository {
       const data = await DriverModel.find(filter).limit(criteria.limit).lean();
       return data.map((item) => new Driver({
         ...item,
-        location: {
+        location: new Location({
           latitude: item.coordinates[1],
           longitude: item.coordinates[0]
-        }
+        })
       }))
     }
 
@@ -47,20 +48,20 @@ export class DriverMongooseRepository implements DriverRepository {
     if (!data) { return null }
     return new Driver({
       ...data,
-      location: {
+      location: new Location({
         latitude: data.coordinates[1],
         longitude: data.coordinates[0]
-      }
+      })
     });
   }
   async get(): Promise<Driver[]> {
     const data = await DriverModel.find().lean();
     return data.map((item) => new Driver({
       ...item,
-      location: {
+      location: new Location({
         latitude: item.coordinates[1],
         longitude: item.coordinates[0]
-      }
+      })
     }))
   }
 }
