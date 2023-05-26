@@ -10,4 +10,5 @@ export function loadRoutes(app: Express): void {
 
   app.get("/passengers", (req, res) => new PassengerController().get(req, res))
   app.get("/passengers/:id", (req, res) => new PassengerController().find(req, res))
+  app.get("/passengers/:id/drivers", (req, res) => new PassengerController().drivers(req, res))
 }

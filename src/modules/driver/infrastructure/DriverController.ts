@@ -8,7 +8,6 @@ export class DriverController {
   async availables(req: Request, res: Response) {
     const getter = new AvailableDriversGetter(new DriverMongooseRepository());
     const { latitude, longitude } = req.query;
-    console.log(req.query)
     const drivers = await getter.run({ latitude: Number(latitude), longitude: Number(longitude) });
     res.status(200).json(drivers);
   }

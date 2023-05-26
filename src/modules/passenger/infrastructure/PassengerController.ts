@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { PassengerGetter } from "../application/PassengerGetter";
 import { PassengerMongooseRepository } from "./mongodb/PassengerMongooseRepository";
 import { PassengerFinder } from "../application/PassengerFinder";
+import { AvailableDriversGetter } from "../../driver/application/AvailableDriversGetter";
+import { DriverMongooseRepository } from "../../driver/infrastructure/mongodb/DriverMongooseRepository";
 
 export class PassengerController {
   async get(_req: Request, res: Response) {
@@ -15,5 +17,12 @@ export class PassengerController {
     const finder = new PassengerFinder(new PassengerMongooseRepository());
     const passenger = await finder.run(id);
     res.status(200).json(passenger);
+  }
+
+  async drivers(req: Request, res: Response) {
+    const getter = new AvailableDriversGetter(new DriverMongooseRepository());
+    const { latitude, longitude } = req.query;
+    const drivers = await getter.run({ latitude: Number(latitude), longitude: Number(longitude) });
+    res.status(200).json(drivers);
   }
 }
