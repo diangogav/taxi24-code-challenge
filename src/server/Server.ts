@@ -1,4 +1,5 @@
-import express, { Express } from "express";
+import "express-async-errors";
+import express, { Express, Response, NextFunction, Request } from "express";
 import { loadRoutes } from "./routes";
 import { config } from "../config";
 
@@ -8,6 +9,11 @@ export class Server {
   constructor() {
     this.app = express();
     loadRoutes(this.app);
+
+    this.app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
+      res.status(500).json((<Error>error).message);
+      next();
+    })
   }
 
   async initialize(): Promise<void> {
