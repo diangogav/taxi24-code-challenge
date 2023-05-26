@@ -19,4 +19,6 @@ const driverSchema = new Schema({
   },
 }, { collection: 'drivers', timestamps: true })
 
+driverSchema.index({ coordinates: '2dsphere' });
+
 export const DriverModel = mongoose.model('drivers', driverSchema);

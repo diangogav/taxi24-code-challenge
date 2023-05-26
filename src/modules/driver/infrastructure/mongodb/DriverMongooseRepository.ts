@@ -1,16 +1,40 @@
-import { Criteria } from "../../../shared/criteria/domain/Criteria";
 import { Driver } from "../../domain/Driver";
+import { DriverFilter } from "../../domain/DriverGetterFilter";
 import { DriverRepository } from "../../domain/DriverRepository";
 import { DriverModel } from "./DriverModel";
 
 export class DriverMongooseRepository implements DriverRepository {
-  async getByCriteria(criteria: Criteria): Promise<Driver[]> {
-    const data = await DriverModel.find(criteria.filter).lean();
+  async getBy(filter: Partial<DriverFilter>): Promise<Driver[]> {
+    if (!filter.nearest) {
+      const data = await DriverModel.find(filter).lean();
+      return data.map((item) => new Driver({
+        ...item,
+        location: {
+          latitude: item.coordinates[1],
+          longitude: item.coordinates[0]
+        }
+      }))
+    }
+
+    const { nearest, ...filterWithoutNearest } = filter;
+    const data = await DriverModel.find({
+      ...filterWithoutNearest,
+      coordinates: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [nearest.longitude, nearest.latitude]
+          },
+          $maxDistance: 3000
+        }
+      }
+    }).lean();
+
     return data.map((item) => new Driver({
       ...item,
       location: {
-        latitude: item.coordinates[0],
-        longitude: item.coordinates[1]
+        latitude: item.coordinates[1],
+        longitude: item.coordinates[0]
       }
     }))
   }
@@ -20,8 +44,8 @@ export class DriverMongooseRepository implements DriverRepository {
     return new Driver({
       ...data,
       location: {
-        latitude: data.coordinates[0],
-        longitude: data.coordinates[1]
+        latitude: data.coordinates[1],
+        longitude: data.coordinates[0]
       }
     });
   }
@@ -30,8 +54,8 @@ export class DriverMongooseRepository implements DriverRepository {
     return data.map((item) => new Driver({
       ...item,
       location: {
-        latitude: item.coordinates[0],
-        longitude: item.coordinates[1]
+        latitude: item.coordinates[1],
+        longitude: item.coordinates[0]
       }
     }))
   }

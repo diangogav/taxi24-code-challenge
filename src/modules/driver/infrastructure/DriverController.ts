@@ -5,9 +5,11 @@ import { DriverFinder } from "../application/DriverFinder";
 import { AvailableDriversGetter } from "../application/AvailableDriversGetter";
 
 export class DriverController {
-  async availables(_req: Request, res: Response) {
+  async availables(req: Request, res: Response) {
     const getter = new AvailableDriversGetter(new DriverMongooseRepository());
-    const drivers = await getter.run();
+    const { latitude, longitude } = req.query;
+    console.log(req.query)
+    const drivers = await getter.run({ latitude: Number(latitude), longitude: Number(longitude) });
     res.status(200).json(drivers);
   }
 
@@ -18,7 +20,7 @@ export class DriverController {
   }
 
   async find(req: Request, res: Response) {
-    const { id } = req.params; 
+    const { id } = req.params;
     const finder = new DriverFinder(new DriverMongooseRepository());
     const drivers = await finder.run(id);
     res.status(200).json(drivers);

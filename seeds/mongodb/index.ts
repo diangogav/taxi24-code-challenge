@@ -5,7 +5,7 @@ const mongoUrl = process.env.MONGO_DB_URI;
 import { randUuid, randFullName, randNearbyGPSCoordinate } from "@ngneat/falso"
 import { DriverModel } from '../../src/modules/driver/infrastructure/mongodb/DriverModel';
 
-if(!mongoUrl) { throw new Error("MONGO_DB_URI env is required.")}
+if (!mongoUrl) { throw new Error("MONGO_DB_URI env is required.") }
 
 mongoose.connect(mongoUrl)
   .then(async () => {
@@ -19,18 +19,46 @@ mongoose.connect(mongoUrl)
 function generateDrivers() {
   const drivers = [];
 
-  for(let i = 0; i < 10; i++ ) {
+  for (let i = 0; i < 10; i++) {
     const coordinates = randNearbyGPSCoordinate();
     drivers.push({
       id: randUuid(),
       name: randFullName(),
       isAvailable: true,
-      location: {
-        latitude: coordinates[0],
-        longitude: coordinates[1]
-      }
+      coordinates: coordinates.reverse()
     })
   }
+
+
+  // Nearest points to 40.712, -74.006
+
+  drivers.push({
+    id: randUuid(),
+    name: randFullName(),
+    isAvailable: true,
+    coordinates: [-74.0060, 40.7128]
+  })
+
+  drivers.push({
+    id: randUuid(),
+    name: randFullName(),
+    isAvailable: true,
+    coordinates: [-74.0055, 40.7110]
+  })
+
+  drivers.push({
+    id: randUuid(),
+    name: randFullName(),
+    isAvailable: true,
+    coordinates: [-74.0070, 40.7125]
+  })
+
+  drivers.push({
+    id: randUuid(),
+    name: randFullName(),
+    isAvailable: true,
+    coordinates: [-74.0080, 40.7135]
+  })
 
   return drivers;
 }
