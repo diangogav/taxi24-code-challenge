@@ -10,7 +10,7 @@ export class Server {
     loadRoutes(this.app);
   }
 
-  initialize(): void {
+  async initialize(): Promise<void> {
     this.app.listen(config.port, () => {
       console.log("Server listen in port 3000");
     })
