@@ -7,4 +7,10 @@ export class PassengerMongooseRepository implements PassengerRepository {
     const data = await PassengerModel.find().lean();
     return data.map(item => new Passenger(item));
   }
+
+  async find(id: string): Promise<Passenger | null> {
+    const data = await PassengerModel.findOne({ id }).lean();
+    if (!data) { return null }
+    return new Passenger(data)
+  }
 }

@@ -22,7 +22,7 @@ export class DriverController {
   async find(req: Request, res: Response) {
     const { id } = req.params;
     const finder = new DriverFinder(new DriverMongooseRepository());
-    const drivers = await finder.run(id);
-    res.status(200).json(drivers);
+    const driver = await finder.run(id);
+    res.status(200).json(driver);
   }
 }
