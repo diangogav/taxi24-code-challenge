@@ -1,3 +1,4 @@
+import { NotFoundError } from "../../shared/errors/domain/NotFoundError";
 import { Passenger } from "../domain/Passenger";
 import { PassengerRepository } from "../domain/PassengerRepository";
 
@@ -6,7 +7,7 @@ export class PassengerFinder {
 
   async run(passengerId: string): Promise<Passenger> {
     const passenger = await this.repository.find(passengerId);
-    if (!passenger) { throw new Error(`Passenger ${passengerId} not found.`) }
+    if (!passenger) { throw new NotFoundError(`Passenger ${passengerId} not found.`) }
     return passenger
   }
 }
