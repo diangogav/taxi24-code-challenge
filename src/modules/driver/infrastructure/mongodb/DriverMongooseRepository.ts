@@ -16,7 +16,7 @@ export class DriverMongooseRepository implements DriverRepository {
       }))
     }
 
-    const { nearest, ...filterWithoutNearest } = filter;
+    const { nearest, maxDistanceInMeters, ...filterWithoutNearest } = filter;
     const data = await DriverModel.find({
       ...filterWithoutNearest,
       coordinates: {
@@ -25,7 +25,7 @@ export class DriverMongooseRepository implements DriverRepository {
             type: "Point",
             coordinates: [nearest.longitude, nearest.latitude]
           },
-          $maxDistance: 3000
+          $maxDistance: maxDistanceInMeters || 3000
         }
       }
     }).lean();

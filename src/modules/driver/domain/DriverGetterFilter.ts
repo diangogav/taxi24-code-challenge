@@ -3,7 +3,8 @@ export type DriverFilter = {
   nearest: {
     latitude: number;
     longitude: number;
-  }
+  },
+  maxDistanceInMeters: number;
 }
 
 export class DriverGetterFilter {
@@ -20,6 +21,10 @@ export class DriverGetterFilter {
       longitude
     }
     return this;
+  }
+
+  maxDistance(distanceInMeters: number) {
+    this.filter.maxDistanceInMeters = distanceInMeters;
   }
 
   get value() {
