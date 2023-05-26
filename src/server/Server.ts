@@ -2,12 +2,16 @@ import "express-async-errors";
 import express, { Express, Response, NextFunction, Request } from "express";
 import { loadRoutes } from "./routes";
 import { config } from "../config";
+import bodyParser from "body-parser";
 
 export class Server {
   private readonly app: Express
 
   constructor() {
     this.app = express();
+
+    this.app.use(bodyParser.json());
+    
     loadRoutes(this.app);
 
     this.app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
