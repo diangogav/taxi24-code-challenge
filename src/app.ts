@@ -1,3 +1,4 @@
-export function add(a: number, b: number) {
-  return a + b;
-}
+import { Server } from "./server/Server";
+
+const server = new Server();
+server.initialize();
