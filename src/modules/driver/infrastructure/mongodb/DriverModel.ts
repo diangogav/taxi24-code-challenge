@@ -1,12 +1,30 @@
 import mongoose, { Schema } from "mongoose"
 
 const driverSchema = new Schema({
-  id: String,
-  name: String,
-  isAvailable: Boolean,
+  id: {
+    type: String,
+    required: true
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  isAvailable: {
+    type: Boolean,
+    required: true
+  },
   location: {
-    latitude: Number,
-    longitude: Number
+    type:{
+      latitude: {
+        type: Number,
+        required: true
+      },
+      longitude: {
+        type: Number,
+        required: true
+      }
+    },
+    required: true
   },
 }, { collection: 'drivers', timestamps: true })
 
