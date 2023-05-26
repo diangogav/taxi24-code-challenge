@@ -13,17 +13,8 @@ const driverSchema = new Schema({
     type: Boolean,
     required: true
   },
-  location: {
-    type:{
-      latitude: {
-        type: Number,
-        required: true
-      },
-      longitude: {
-        type: Number,
-        required: true
-      }
-    },
+  coordinates: {
+    type: [Number],
     required: true
   },
 }, { collection: 'drivers', timestamps: true })

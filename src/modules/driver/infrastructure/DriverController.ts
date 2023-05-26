@@ -2,13 +2,18 @@ import { Request, Response } from "express";
 import { DriverGetter } from "../application/DriverGetter";
 import { DriverMongooseRepository } from "./mongodb/DriverMongooseRepository";
 import { DriverFinder } from "../application/DriverFinder";
-import { DriverGetterFilter } from "../domain/DriverGetterFilter";
+import { AvailableDriversGetter } from "../application/AvailableDriversGetter";
 
 export class DriverController {
-  async get(req: Request, res: Response) {
-    const filter = new DriverGetterFilter(req.query);
+  async availables(_req: Request, res: Response) {
+    const getter = new AvailableDriversGetter(new DriverMongooseRepository());
+    const drivers = await getter.run();
+    res.status(200).json(drivers);
+  }
+
+  async get(_req: Request, res: Response) {
     const getter = new DriverGetter(new DriverMongooseRepository());
-    const drivers = await getter.run(filter);
+    const drivers = await getter.run();
     res.status(200).json(drivers);
   }
 
