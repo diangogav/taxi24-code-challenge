@@ -1,5 +1,5 @@
 import { Location } from "../../shared/location/domain/Location";
-import { v4 as uuidv4 } from 'uuid';
+import { Uuid } from "../../shared/value-objets/Uuid";
 
 export class Trip {
   readonly id: string;
@@ -30,7 +30,7 @@ export class Trip {
     endLocation?: Location;
     end?: Date;
   }) {
-    this.id = id;
+    this.id = new Uuid(id).value;
     this.passengerId = passengerId;
     this.driverId = driverId;
     this.status = status;
@@ -42,7 +42,7 @@ export class Trip {
 
   static create({ driverId, passengerId, startLocation }: { driverId: string, passengerId: string; startLocation: Location }) {
     return new Trip({
-      id: uuidv4(),
+      id: Uuid.random().value,
       passengerId,
       driverId,
       status: "active",
