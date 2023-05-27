@@ -1,12 +1,13 @@
-export abstract class ApplicationError {
-  public readonly message: unknown;
+export abstract class ApplicationError extends Error {
+  public readonly message: string;
   abstract readonly statusCode: number;
 
-  constructor({ message }: { message: unknown }) {
+  constructor({ message }: { message: string }) {
+    super();
     this.message = message;
   }
 
-  serialize(): { message: unknown; errors?: string[] } {
+  serialize(): { message: string; errors?: string[] } {
     return {
       message: this.message
     }
