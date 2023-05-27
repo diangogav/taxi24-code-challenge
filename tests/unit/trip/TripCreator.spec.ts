@@ -9,11 +9,14 @@ import { DriverObjectMother } from "../../shared/DriverObjectMother"
 import { PassengerObjectMother } from "../../shared/PassengerObjectMother"
 import { Location } from "../../../src/modules/shared/location/domain/Location"
 import { LocationObjectMother } from "../../shared/LocationObjectMother"
+import { DriverRepository } from "../../../src/modules/driver/domain/DriverRepository"
 
 describe("Trip Creator", () => {
   let tripRepository: MockProxy<TripRepository>
   let driverFinder: MockProxy<DriverFinder>
   let passengerFinder: MockProxy<PassengerFinder>
+  let driverRepository: MockProxy<DriverRepository>
+
   let driver: Driver
   let passenger: Passenger
   let location: Location
@@ -22,6 +25,7 @@ describe("Trip Creator", () => {
     tripRepository = mock();
     driverFinder = mock();
     passengerFinder = mock();
+    driverRepository = mock();
     driver = DriverObjectMother.random();
     passenger = PassengerObjectMother.random();
     location = LocationObjectMother.random();
@@ -30,7 +34,7 @@ describe("Trip Creator", () => {
   it("Should create a trip", async () => {
     driverFinder.run.mockResolvedValue(driver);
     passengerFinder.run.mockResolvedValue(passenger);
-    const creator = new TripCreator(tripRepository, passengerFinder, driverFinder);
+    const creator = new TripCreator(tripRepository, passengerFinder, driverFinder, driverRepository);
     await creator.run({ driverId: driver.id, passengerId: passenger.id, latitude: location.latitude, longitude: location.longitude });
     expect(driverFinder.run).toHaveBeenCalledWith(driver.id);
     expect(passengerFinder.run).toHaveBeenCalledWith(passenger.id);
