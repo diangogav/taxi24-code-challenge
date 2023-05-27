@@ -7,25 +7,42 @@ import { PassengerFinder } from "../../passenger/application/PassengerFinder";
 import { PassengerMongooseRepository } from "../../passenger/infrastructure/mongodb/PassengerMongooseRepository";
 import { TripCompleter } from "../application/TripCompleter";
 import { TripGetter } from "../application/TripGetter";
+import { InvalidArgumentError } from "../../shared/errors/domain/InvalidArgumentError";
+import { BadRequestError } from "../../shared/errors/domain/BadRequestError";
 
 export class TripController {
   async create(req: Request, res: Response) {
-    const body = req.body;
-    const repository = new TripMongooseRepository();
-    const driverFinder = new DriverFinder(new DriverMongooseRepository());
-    const passengerFinder = new PassengerFinder(new PassengerMongooseRepository());
+    try {
+      const body = req.body;
+      const repository = new TripMongooseRepository();
+      const driverFinder = new DriverFinder(new DriverMongooseRepository());
+      const passengerFinder = new PassengerFinder(new PassengerMongooseRepository());
+      const creator = new TripCreator(repository, passengerFinder, driverFinder);
+      await creator.run(body);
+      res.status(200).json({});
+    } catch (error) {
+      if (error instanceof InvalidArgumentError) {
+        throw new BadRequestError((<InvalidArgumentError>error).message);
+      }
 
-    const creator = new TripCreator(repository, passengerFinder, driverFinder);
-    await creator.run(body);
-    res.status(200).json({});
+      throw error;
+    }
   }
 
   async complete(req: Request, res: Response) {
-    const { id } = req.params;
-    const { latitude, longitude } = req.body;
-    const completer = new TripCompleter(new TripMongooseRepository());
-    await completer.run({ tripId: id, latitude, longitude });
-    res.status(200).json({});
+    try {
+      const { id } = req.params;
+      const { latitude, longitude } = req.body;
+      const completer = new TripCompleter(new TripMongooseRepository());
+      await completer.run({ tripId: id, latitude, longitude });
+      res.status(200).json({});
+    } catch (error) {
+      if (error instanceof InvalidArgumentError) {
+        throw new BadRequestError((<InvalidArgumentError>error).message);
+      }
+
+      throw error;
+    }
   }
 
   async get(req: Request, res: Response) {

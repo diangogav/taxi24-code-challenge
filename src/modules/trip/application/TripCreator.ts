@@ -16,6 +16,6 @@ export class TripCreator {
     await this.passengerFinder.run(passengerId);
     const startLocation = new Location({ latitude, longitude });
     const trip = Trip.create({ driverId, passengerId, startLocation });
-    await this.repository.create(trip)
+    await this.repository.create(trip);
   }
 }

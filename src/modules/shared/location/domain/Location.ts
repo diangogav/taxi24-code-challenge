@@ -12,12 +12,20 @@ export class Location {
   }
 
   private ensureIsValidLongitude(longitude: number) {
+    if(longitude === null || longitude === undefined) {
+      throw new InvalidArgumentError('Invalid longitude value');
+    }
+
     if (longitude < -180 || longitude > 180) {
       throw new InvalidArgumentError('Invalid longitude value');
     }
   }
 
   private ensureIsValidLatitude(latitude: number) {
+    if(latitude === null || latitude === undefined) {
+      throw new InvalidArgumentError('Invalid latitude value');
+    }
+
     if (latitude < -90 || latitude > 90) {
       throw new InvalidArgumentError('Invalid latitude value');
     }

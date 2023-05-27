@@ -55,7 +55,8 @@ export class Trip {
     return new Trip({
       ...this,
       status: 'completed',
-      endLocation
+      endLocation,
+      end: new Date()
     });
   }
 

@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import mongoose from "mongoose";
 const mongoUrl = process.env.MONGO_DB_URI;
-import { randUuid, randFullName, randNearbyGPSCoordinate } from "@ngneat/falso"
+import { randUuid, randFullName, randLongitude, randLatitude } from "@ngneat/falso"
 import { DriverModel } from '../../src/modules/driver/infrastructure/mongodb/DriverModel';
 import { PassengerModel } from '../../src/modules/passenger/infrastructure/mongodb/PassegerModel';
 
@@ -36,12 +36,11 @@ function generateDrivers() {
   const drivers = [];
 
   for (let i = 0; i < 10; i++) {
-    const coordinates = randNearbyGPSCoordinate();
     drivers.push({
       id: randUuid(),
       name: randFullName(),
       isAvailable: true,
-      coordinates: coordinates.reverse()
+      coordinates: [randLongitude(), randLatitude()]
     })
   }
 
