@@ -21,9 +21,13 @@ export class TripCreator {
       .passenger(passengerId)
 
     const passengerTrip = await this.repository.findBy(passengerAlreadyInTripFilter);
-    if(passengerTrip) { throw new ConflictError(`passenger ${passengerId} already in an active trip.`)}
+    if (passengerTrip) { throw new ConflictError(`passenger ${passengerId} already in an active trip.`) }
 
     const driver = await this.driverFinder.run(driverId);
+
+    if (!driver.isAvailable) {
+      throw new ConflictError(`Driver ${driverId} is not available.`);
+    }
     await this.passengerFinder.run(passengerId);
     const startLocation = new Location({ latitude, longitude });
     const trip = Trip.create({ driverId, passengerId, startLocation });

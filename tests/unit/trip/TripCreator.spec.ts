@@ -27,7 +27,7 @@ describe("Trip Creator", () => {
     driverFinder = mock();
     passengerFinder = mock();
     driverRepository = mock();
-    driver = DriverObjectMother.random();
+    driver = DriverObjectMother.available();
     passenger = PassengerObjectMother.random();
     location = LocationObjectMother.random();
   })
@@ -48,6 +48,20 @@ describe("Trip Creator", () => {
       .value
 
     tripRepository.findBy.mockResolvedValue(trip);
+    driverFinder.run.mockResolvedValue(driver);
+    passengerFinder.run.mockResolvedValue(passenger);
+
+    const creator = new TripCreator(tripRepository, passengerFinder, driverFinder, driverRepository);
+
+    await expect(
+      creator.run({ driverId: driver.id, passengerId: passenger.id, latitude: location.latitude, longitude: location.longitude })
+    )
+      .rejects
+      .toThrowError();
+  })
+
+  it("Should throw an error if driver is not available", async () => {
+    driver = new DriverObjectMother().withAvailable(false).value;
     driverFinder.run.mockResolvedValue(driver);
     passengerFinder.run.mockResolvedValue(passenger);
 
