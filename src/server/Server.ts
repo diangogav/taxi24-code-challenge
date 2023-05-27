@@ -5,9 +5,11 @@ import { config } from "../config";
 import bodyParser from "body-parser";
 import { ApplicationError } from "../modules/shared/errors/domain/ApplicationError";
 import { ServerError } from "../modules/shared/errors/domain/ServerError";
+import http from "http";
 
 export class Server {
-  private readonly app: Express
+  private readonly app: Express;
+  private connection: http.Server | null = null;
 
   constructor() {
     this.app = express();
@@ -28,8 +30,15 @@ export class Server {
   }
 
   async initialize(): Promise<void> {
-    this.app.listen(config.port, () => {
+    this.connection = this.app.listen(config.port, () => {
       console.log("Server listen in port 3000");
     })
+  }
+
+  async stop(): Promise<void> {
+    if (!this.connection) { return }
+    this.connection.close(() => {
+      return Promise.resolve();
+    });
   }
 }
