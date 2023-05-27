@@ -1,8 +1,10 @@
 import { DriverFinder } from "../../driver/application/DriverFinder";
 import { DriverRepository } from "../../driver/domain/DriverRepository";
 import { PassengerFinder } from "../../passenger/application/PassengerFinder";
+import { ConflictError } from "../../shared/errors/domain/ConflictError";
 import { Location } from "../../shared/location/domain/Location";
 import { Trip } from "../domain/Trip";
+import { TripGetterFilter } from "../domain/TripGetterFilter";
 import { TripRepository } from "../domain/TripRepository";
 
 export class TripCreator {
@@ -14,6 +16,13 @@ export class TripCreator {
   ) { }
 
   async run({ driverId, passengerId, latitude, longitude }: { driverId: string; passengerId: string; latitude: number; longitude: number }): Promise<void> {
+    const passengerAlreadyInTripFilter = new TripGetterFilter()
+      .status("active")
+      .passenger(passengerId)
+
+    const passengerTrip = await this.repository.findBy(passengerAlreadyInTripFilter);
+    if(passengerTrip) { throw new ConflictError(`passenger ${passengerId} already in an active trip.`)}
+
     const driver = await this.driverFinder.run(driverId);
     await this.passengerFinder.run(passengerId);
     const startLocation = new Location({ latitude, longitude });

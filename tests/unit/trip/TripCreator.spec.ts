@@ -10,6 +10,7 @@ import { PassengerObjectMother } from "../../shared/PassengerObjectMother"
 import { Location } from "../../../src/modules/shared/location/domain/Location"
 import { LocationObjectMother } from "../../shared/LocationObjectMother"
 import { DriverRepository } from "../../../src/modules/driver/domain/DriverRepository"
+import { TripObjectMother } from "../../shared/TripObjectMother"
 
 describe("Trip Creator", () => {
   let tripRepository: MockProxy<TripRepository>
@@ -38,5 +39,24 @@ describe("Trip Creator", () => {
     await creator.run({ driverId: driver.id, passengerId: passenger.id, latitude: location.latitude, longitude: location.longitude });
     expect(driverFinder.run).toHaveBeenCalledWith(driver.id);
     expect(passengerFinder.run).toHaveBeenCalledWith(passenger.id);
+  })
+
+  it("Should throw an error if passenger already in a active trip", async () => {
+    const trip = new TripObjectMother()
+      .withPassengerId(passenger.id)
+      .withStatus("active")
+      .value
+
+    tripRepository.findBy.mockResolvedValue(trip);
+    driverFinder.run.mockResolvedValue(driver);
+    passengerFinder.run.mockResolvedValue(passenger);
+
+    const creator = new TripCreator(tripRepository, passengerFinder, driverFinder, driverRepository);
+
+    await expect(
+      creator.run({ driverId: driver.id, passengerId: passenger.id, latitude: location.latitude, longitude: location.longitude })
+    )
+      .rejects
+      .toThrowError();
   })
 })

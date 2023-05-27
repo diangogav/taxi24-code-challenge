@@ -1,6 +1,7 @@
 import { Criteria } from "../../../shared/criteria/domain/Criteria";
 import { Location } from "../../../shared/location/domain/Location";
 import { Trip } from "../../domain/Trip";
+import { TripGetterFilter } from "../../domain/TripGetterFilter";
 import { TripRepository } from "../../domain/TripRepository";
 import { TripModel } from "./TripModel";
 
@@ -38,5 +39,15 @@ export class TripMongooseRepository implements TripRepository {
   async create(trip: Trip): Promise<void> {
     const instance = await new TripModel(trip).save();
     instance.save();
+  }
+
+  async findBy(filter: TripGetterFilter): Promise<Trip | null> {
+    const data = await TripModel.findOne(filter.value).lean();
+    if (!data) { return null }
+    return new Trip({
+      ...data,
+      startLocation: new Location(data.startLocation),
+      endLocation: data?.endLocation && new Location(data.endLocation),
+    });
   }
 }
