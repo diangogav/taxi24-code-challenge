@@ -13,4 +13,9 @@ export class PassengerMongooseRepository implements PassengerRepository {
     if (!data) { return null }
     return new Passenger(data)
   }
+
+  async create(passenger: Passenger): Promise<void> {
+    const entity = new PassengerModel(passenger);
+    await entity.save();
+  }
 }

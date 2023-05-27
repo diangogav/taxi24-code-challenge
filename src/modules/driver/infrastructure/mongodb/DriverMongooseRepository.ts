@@ -6,6 +6,21 @@ import { DriverRepository } from "../../domain/DriverRepository";
 import { DriverModel } from "./DriverModel";
 
 export class DriverMongooseRepository implements DriverRepository {
+  async updateOne(driver: Driver): Promise<void> {
+    const { location, ...data } = driver;
+
+    await DriverModel.updateOne(
+      { id: driver.id },
+      {
+        $set: {
+          ...data,
+          isAvailable: driver.isAvailable,
+          coordinates: [location.longitude, location.latitude]
+        }
+      }
+    )
+  }
+
   async getBy(criteria: Criteria): Promise<Driver[]> {
     const filter = criteria.filter.value as DriverFilter
     if (!filter.nearest) {
@@ -54,6 +69,7 @@ export class DriverMongooseRepository implements DriverRepository {
       })
     });
   }
+
   async get(): Promise<Driver[]> {
     const data = await DriverModel.find().lean();
     return data.map((item) => new Driver({
@@ -63,5 +79,14 @@ export class DriverMongooseRepository implements DriverRepository {
         longitude: item.coordinates[0]
       })
     }))
+  }
+
+  async create(driver: Driver): Promise<void> {
+    const { location, ...data } = driver;
+    await DriverModel.create({
+      ...data,
+      isAvailable: driver.isAvailable,
+      coordinates: [location.longitude, location.latitude]
+    });
   }
 }

@@ -15,9 +15,10 @@ export class TripController {
     try {
       const body = req.body;
       const repository = new TripMongooseRepository();
-      const driverFinder = new DriverFinder(new DriverMongooseRepository());
+      const driverRepository = new DriverMongooseRepository();
+      const driverFinder = new DriverFinder(driverRepository);
       const passengerFinder = new PassengerFinder(new PassengerMongooseRepository());
-      const creator = new TripCreator(repository, passengerFinder, driverFinder);
+      const creator = new TripCreator(repository, passengerFinder, driverFinder, driverRepository);
       await creator.run(body);
       res.status(200).json({});
     } catch (error) {

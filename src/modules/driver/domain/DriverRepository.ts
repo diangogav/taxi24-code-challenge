@@ -5,4 +5,5 @@ export interface DriverRepository {
   get(): Promise<Driver[]>;
   getBy(criteria: Criteria): Promise<Driver[]>;
   find(id: string): Promise<Driver | null>;
+  updateOne(driver: Driver): Promise<void>
 }
