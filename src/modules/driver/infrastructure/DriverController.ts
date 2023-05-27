@@ -9,19 +9,19 @@ export class DriverController {
     const getter = new AvailableDriversGetter(new DriverMongooseRepository());
     const { latitude, longitude } = req.query;
     const drivers = await getter.run({ latitude: Number(latitude), longitude: Number(longitude) });
-    res.status(200).json(drivers);
+    res.status(200).json(drivers.map(driver => driver.toPrimitives()));
   }
 
   async get(_req: Request, res: Response) {
     const getter = new DriverGetter(new DriverMongooseRepository());
     const drivers = await getter.run();
-    res.status(200).json(drivers);
+    res.status(200).json(drivers.map(driver => driver.toPrimitives()));
   }
 
   async find(req: Request, res: Response) {
     const { id } = req.params;
     const finder = new DriverFinder(new DriverMongooseRepository());
     const driver = await finder.run(id);
-    res.status(200).json(driver);
+    res.status(200).json(driver.toPrimitives());
   }
 }

@@ -21,7 +21,7 @@ export class TripCompleter {
     const completedTrip = trip.complete({ endLocation });
     driver.completeTrip(latitude, longitude);
     await this.repository.updateOne(completedTrip);
-    await this.driverRepository.updateOne(driver);
+    await this.driverRepository.updateOne(driver)
   }
 
   private async findTrip(tripId: string) {

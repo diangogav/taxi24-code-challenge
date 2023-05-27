@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import mongoose from "mongoose";
 const mongoUrl = process.env.MONGO_DB_URI;
-import { randUuid, randFullName, randLongitude, randLatitude } from "@ngneat/falso"
+import { randUuid, randFullName, randLongitude, randLatitude, randBoolean } from "@ngneat/falso"
 import { DriverModel } from '../../src/modules/driver/infrastructure/mongodb/DriverModel';
 import { PassengerModel } from '../../src/modules/passenger/infrastructure/mongodb/PassegerModel';
 
@@ -22,7 +22,7 @@ mongoose.connect(mongoUrl)
   })
 
 function generatePassengers() {
-  const passengers = [];
+  const passengers: { id: string; name: string }[] = [];
   for (let i = 0; i < 10; i++) {
     passengers.push({
       id: randUuid(),
@@ -33,13 +33,13 @@ function generatePassengers() {
   return passengers;
 }
 function generateDrivers() {
-  const drivers = [];
+  const drivers: { id: string; name: string; isAvailable: boolean, coordinates: [number, number] }[] = [];
 
   for (let i = 0; i < 10; i++) {
     drivers.push({
       id: randUuid(),
       name: randFullName(),
-      isAvailable: true,
+      isAvailable: randBoolean(),
       coordinates: [randLongitude(), randLatitude()]
     })
   }

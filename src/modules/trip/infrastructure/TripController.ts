@@ -34,7 +34,8 @@ export class TripController {
     try {
       const { id } = req.params;
       const { latitude, longitude } = req.body;
-      const completer = new TripCompleter(new TripMongooseRepository());
+      const driverRepository = new DriverMongooseRepository()
+      const completer = new TripCompleter(new TripMongooseRepository(), new DriverFinder(driverRepository), driverRepository);
       await completer.run({ tripId: id, latitude, longitude });
       res.status(200).json({});
     } catch (error) {
