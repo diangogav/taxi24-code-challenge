@@ -10,3 +10,16 @@ services:
       - 27017:27017
     volumes:
       - .data/mongo:/data/db
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - PORT=$PORT
+      - MONGO_DB_URI=$MONGO_DB_URI
+    ports:
+      - "3000:3000"
