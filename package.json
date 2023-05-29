@@ -7,7 +7,7 @@
     "start": "ts-node-dev --respawn src/app.ts",
     "seed": "ts-node-dev seeds/mongodb/index.ts",
     "test": "jest --passWithNoTests --no-cache --logHeapUsage",
-    "test:unit": "npm run test -- /tests/unit", 
+    "test:unit": "npm run test -- --config jest.config.units.ts -- /tests/unit", 
     "test:integration": "npm run test -- /tests/integration"
   },
   "keywords": [],
