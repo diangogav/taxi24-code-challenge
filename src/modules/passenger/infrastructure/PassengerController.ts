@@ -24,6 +24,6 @@ export class PassengerController {
     const { latitude, longitude } = req.query;
     const limit = 3;
     const drivers = await getter.run({ latitude: Number(latitude), longitude: Number(longitude), limit });
-    res.status(200).json(drivers);
+    res.status(200).json(drivers.map(driver => driver.toPrimitives()));
   }
 }

@@ -27,8 +27,9 @@ npm install
 
 Crea un archivo `.env` en la raíz del proyecto y configura las variables de entorno necesarias, como la URL de conexión a la base de datos MongoDB, puertos, claves de API, etc. Tomar el archivo .env.example como referencia.
 
-3.1 Seeds
+3. Seeds
 
+Teniendo la base de datos iniciada.
 Puedes poblar la base de datos con datos iniciales usando el comando:
 ```npm run seeds```
 
@@ -211,7 +212,7 @@ Código de estado: 200 (OK)
 ```
 ---
 
-#### Obtener pasajeros
+### Obtener pasajeros
 ```GET /passengers```
 
 Endpoint para obtener una lista de pasajeros.
@@ -234,7 +235,7 @@ Código de estado: 200 (OK)
 ```
 ----
 
-#### Obtener información de un pasajero
+### Obtener información de un pasajero
 ```GET /passengers/{passengerId}```
 
 Endpoint para buscar un pasajero específico por su ID.
@@ -257,9 +258,13 @@ Código de estado: 200 (OK)
 ---
 
 ### Obtener conductores disponibles para un pasajero
-```GET /passengers/drivers```
+```GET /passengers/{passengerId}/drivers```
 
 Endpoint para obtener una lista de máximo 3 conductores disponibles para un pasajero en función de la ubicación proporcionada.
+
+#### Path Params:
+
+`passengerId` (string, requerido): ID del pasajero.
 
 #### Query Params:
 
@@ -305,7 +310,7 @@ Código de estado: 200 (OK)
 
 ---
 
-#### Crear viaje
+### Crear viaje
 ```POST /trips```
 
 Endpoint para crear un nuevo viaje.
@@ -356,7 +361,7 @@ Cuerpo de respuesta: Respuesta vacía (objeto vacío {}).
 
 ---
 
-#### Obtener viajes
+### Obtener viajes
 
 ```GET /trips```
 
