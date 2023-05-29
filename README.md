@@ -338,7 +338,7 @@ Cuerpo de respuesta: Respuesta vacía (objeto vacío {}).
 
 ---
 
-#### Completar viaje
+### Completar viaje
 ```POST /trips/{tripId}/complete```
 
 Endpoint para marcar un viaje como completado.
