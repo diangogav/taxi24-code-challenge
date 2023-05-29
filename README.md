@@ -16,8 +16,6 @@ Taxi 24 API consiste en un conjunto de endpoints que permite a cualquier consumi
 git clone https://github.com/diangogav/taxi24-code-challenge.git
 ```
 
----
-
 2. Instala las dependencias:
 
 ```bash
@@ -25,13 +23,9 @@ cd taxi24-code-challenge
 npm install
 ```
 
----
-
 3. Configura las variables de entorno:
 
 Crea un archivo `.env` en la raíz del proyecto y configura las variables de entorno necesarias, como la URL de conexión a la base de datos MongoDB, puertos, claves de API, etc. Tomar el archivo .env.example como referencia.
-
----
 
 3. Seeds
 
@@ -41,8 +35,6 @@ Puedes poblar la base de datos con datos iniciales usando el comando:
 
 Esto creará un conjunto de datos de `drivers` y `passenger` en sus respectivas colecciones.
 
----
-
 4. Iniciar la aplicación:
 
 ```bash
@@ -51,19 +43,20 @@ npm start
 
 La aplicación estará disponible en http://localhost:3000 (o el puerto especificado en las variables de entorno).
 
----
-
 5. Pruebas automáticas
 
 Todas las pruebas automáticas.
+
 ```npm run tests```
 
 Pruebas unitarias.
+
 ```npm run test:unit```
 
 Pruebas de integración.
 
 Para ejecutar las pruebas de integración es necesario tener docker compose para iniciar la base de datos
+
 ```npm run test:integration```
 
 ---
