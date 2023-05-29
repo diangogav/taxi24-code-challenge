@@ -27,6 +27,13 @@ npm install
 
 Crea un archivo `.env` en la raíz del proyecto y configura las variables de entorno necesarias, como la URL de conexión a la base de datos MongoDB, puertos, claves de API, etc. Tomar el archivo .env.example como referencia.
 
+3.1 Seeds
+
+Puedes poblar la base de datos con datos iniciales usando el comando:
+```npm run seeds```
+
+Esto creará un conjunto de datos de `drivers` y `passenger` en sus respectivas colecciones.
+
 4. Iniciar la aplicación:
 
 ```bash
@@ -35,9 +42,29 @@ npm start
 
 La aplicación estará disponible en http://localhost:3000 (o el puerto especificado en las variables de entorno).
 
+5. Pruebas automáticas
+
+Todas las pruebas automáticas.
+```npm run tests```
+
+Pruebas unitarias.
+```npm run test:unit```
+
+Pruebas de integración.
+
+Para ejecutar las pruebas de integración es necesario tener docker compose para iniciar la base de datos
+```npm run test:integration```
+
+
 ### Docker
 
-Alternativamente se puede usar `docker compose` para ejecutar la aplicación junto con la base de datos. En este caso obligatoriamente la aplicación correrá en el puerto `3000` a menos que se cambie el parámetro en el Dockerfile y en el docker-compose.yaml
+Alternativamente se puede usar `docker compose` para ejecutar la base de datos de la aplicación.
+
+También se puede usar el Dockerfile para realizar una imagen de docker de la aplicaciónn y ejecutarla.
+
+```docker build -t <image-name>```
+
+```docker run -p <local-port>:<docker-port> <docker container name>```
 
 ## Estructura del Proyecto
 
