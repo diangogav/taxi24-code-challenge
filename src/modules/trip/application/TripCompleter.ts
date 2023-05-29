@@ -2,7 +2,9 @@ import { DriverFinder } from "../../driver/application/DriverFinder";
 import { DriverRepository } from "../../driver/domain/DriverRepository";
 import { ConflictError } from "../../shared/errors/domain/ConflictError";
 import { NotFoundError } from "../../shared/errors/domain/NotFoundError";
+import { EventBus } from "../../shared/event-bus/EventBus";
 import { Location } from "../../shared/location/domain/Location";
+import { TripCompleterDomainEvent } from "../../shared/trip/domain/TripCompleterDomainEvent";
 import { Trip } from "../domain/Trip";
 import { TripRepository } from "../domain/TripRepository";
 
@@ -21,7 +23,14 @@ export class TripCompleter {
     const completedTrip = trip.complete({ endLocation });
     driver.completeTrip(latitude, longitude);
     await this.repository.updateOne(completedTrip);
-    await this.driverRepository.updateOne(driver)
+    await this.driverRepository.updateOne(driver);
+    EventBus.getInstance().publish(TripCompleterDomainEvent.DOMAIN_EVENT, new TripCompleterDomainEvent({
+      driverName: driver.name,
+      startDate: completedTrip.start,
+      endDate: completedTrip.end!,
+      startLocation: completedTrip.startLocation,
+      endLocation: completedTrip.endLocation!
+    }))
   }
 
   private async findTrip(tripId: string) {
