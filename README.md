@@ -189,6 +189,10 @@ Endpoint para obtener una lista de conductores disponibles en función de la ubi
 
 `longitude` (number, requerido): Longitud de la ubicación actual.
 
+NOTA: si ejecutaste los seeders, puedes usar los siguientes datos ya acomodados para que generen una respuesta válida
+
+`?latitude=40.712&longitude=-74.006`
+
 #### Respuesta exitosa
 Código de estado: 200 (OK)
 
