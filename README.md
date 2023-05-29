@@ -6,6 +6,7 @@ Taxi 24 API consiste en un conjunto de endpoints que permite a cualquier consumi
 
 - Node.js (versión 18.6.0)
 - MongoDB (versión 6)
+- Docker compose (Opcional para ejecutar las pruebas de integración)
 
 ## Configuración
 
@@ -33,6 +34,10 @@ npm start
 ```
 
 La aplicación estará disponible en http://localhost:3000 (o el puerto especificado en las variables de entorno).
+
+### Docker
+
+Alternativamente se puede usar `docker compose` para ejecutar la aplicación junto con la base de datos. En este caso obligatoriamente la aplicación correrá en el puerto `3000` a menos que se cambie el parámetro en el Dockerfile y en el docker-compose.yaml
 
 ## Estructura del Proyecto
 
@@ -354,32 +359,3 @@ Código de estado: 200 (OK)
   }
 ]
 ```
-## Contribución
-
-Si deseas contribuir a este proyecto, sigue los siguientes pasos:
-
-1. Haz un fork de este repositorio.
-
-2. Crea una nueva rama con la siguiente convención de nombres:
-
-```plaintext
-git checkout -b feature/nombre-de-la-funcionalidad
-```
-
-3. Realiza tus cambios y añade tus mejoras.
-
-4. Asegúrate de ejecutar las pruebas y de que pasen correctamente:
-
-```bash
-npm test
-```
-
-5. Envía una solicitud de extracción (Pull Request) a la rama principal del repositorio original.
-
-## Licencia
-
-Este proyecto se encuentra bajo la Licencia [MIT](https://opensource.org/licenses/MIT).
-
-## Contacto
-
-Para cualquier consulta o duda sobre el proyecto, puedes contactarme a través del siguiente correo electrónico: [tu-correo@example.com
