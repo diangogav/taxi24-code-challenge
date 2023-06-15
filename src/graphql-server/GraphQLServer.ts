@@ -38,6 +38,8 @@ export class GraphQLServer {
     type Query {
       drivers: [Driver]
       passengers: [Passenger]
+      driver(id: String!): Driver
+      passenger(id: String!): Passenger
     }
     `;
   }
@@ -46,7 +48,11 @@ export class GraphQLServer {
     return {
       Query: {
         drivers: async () => await new DriverResolvers().get(),
-        passengers: async () => await new PassegerResolvers().get()
+        driver: async (parent: undefined, args: { id: string }) =>
+          await new DriverResolvers().find(parent, args),
+        passengers: async () => await new PassegerResolvers().get(),
+        passenger: async (parent: undefined, args: { id: string }) =>
+          await new PassegerResolvers().find(parent, args),
       },
     };
   }
