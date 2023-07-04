@@ -8,7 +8,10 @@
     "seed": "ts-node-dev seeds/mongodb/index.ts",
     "test": "jest --passWithNoTests --no-cache --logHeapUsage",
     "test:unit": "npm run test -- --config jest.config.units.ts -- /tests/unit",
-    "test:integration": "npm run test -- /tests/integration"
+    "test:integration": "npm run test -- /tests/integration",
+    "migration:generate": "typeorm-ts-node-commonjs -d ./src/modules/shared/database/infrastructure/postgres/data-source.ts migration:generate ./src/modules/shared/database/infrastructure/postgres/migrations/default",
+    "migration:run": "typeorm-ts-node-commonjs -d ./src/modules/shared/database/infrastructure/postgres/data-source.ts migration:run",
+    "postgres:seed": "typeorm-extension seed -d ./src/modules/shared/database/infrastructure/postgres/data-source.ts"
   },
   "keywords": [],
   "author": "",
@@ -40,6 +43,10 @@
     "express-async-errors": "^3.1.1",
     "graphql": "^16.6.0",
     "mongoose": "^7.2.1",
+    "pg": "^8.11.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.3.16",
+    "typeorm-extension": "^2.8.1",
     "uuid": "^9.0.0",
     "uuid-validate": "^0.0.3"
   }

@@ -1,6 +1,9 @@
+import "reflect-metadata";
+
 import { GraphQLServer } from "./graphql-server/GraphQLServer";
 import { MongoDB } from "./modules/shared/database/infrastructure/mongodb/MongoDB";
 import { Server } from "./server/Server";
+import { PgConnection } from "./modules/shared/database/infrastructure/postgres/PgConnection";
 
 boostrap();
 
@@ -12,4 +15,5 @@ async function boostrap(): Promise<void> {
   await server.initialize();
   await graphQLServer.initialize();
   await database.connect();
+  PgConnection.getInstance().connect();
 }
