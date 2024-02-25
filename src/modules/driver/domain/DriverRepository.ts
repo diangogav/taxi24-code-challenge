@@ -1,9 +1,18 @@
-import { Criteria } from "../../shared/criteria/domain/Criteria";
-import { Driver } from "./Driver";
+import { Driver } from './Driver';
 
 export interface DriverRepository {
   get(): Promise<Driver[]>;
-  getBy(criteria: Criteria): Promise<Driver[]>;
+  getAvailablesNearestDrivers({
+    latitude,
+    longitude,
+    maxDistanceInMeters,
+    limit,
+  }: {
+    latitude?: number;
+    longitude?: number;
+    maxDistanceInMeters: number;
+    limit: number;
+  }): Promise<Driver[]>;
   find(id: string): Promise<Driver | null>;
-  updateOne(driver: Driver): Promise<void>
+  updateOne(driver: Driver): Promise<void>;
 }

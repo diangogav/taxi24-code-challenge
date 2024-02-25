@@ -1,5 +1,3 @@
-import { Filter } from "../../shared/criteria/domain/Filter";
-
 export type DriverFilter = {
   isAvailable: boolean;
   nearest: {
@@ -9,7 +7,7 @@ export type DriverFilter = {
   maxDistanceInMeters: number;
 }
 
-export class DriverGetterFilter implements Filter {
+export class DriverGetterFilterBuilder {
   private filter: Partial<DriverFilter> = {}
 
   available() {

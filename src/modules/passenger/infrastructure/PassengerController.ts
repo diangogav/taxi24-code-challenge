@@ -30,8 +30,8 @@ export class PassengerController {
   }
 
   async get(_req: Request, res: Response) {
-    const getter = new PassengerGetter(new PassengerTypeORMRepository());
-    // const getter = new PassengerGetter(new PassengerMongooseRepository());
+    // const getter = new PassengerGetter(new PassengerTypeORMRepository());
+    const getter = new PassengerGetter(new PassengerMongooseRepository());
     const passengers = await getter.run();
     res.status(200).json(passengers);
   }

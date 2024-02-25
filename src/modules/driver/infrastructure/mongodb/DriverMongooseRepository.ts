@@ -1,7 +1,6 @@
-import { Criteria } from "../../../shared/criteria/domain/Criteria";
 import { Location } from "../../../shared/location/domain/Location";
 import { Driver } from "../../domain/Driver";
-import { DriverFilter } from "../../domain/DriverGetterFilter";
+import { DriverFilter, DriverGetterFilterBuilder } from "../../domain/DriverGetterFilter";
 import { DriverRepository } from "../../domain/DriverRepository";
 import { DriverModel } from "./DriverModel";
 
@@ -21,10 +20,26 @@ export class DriverMongooseRepository implements DriverRepository {
     )
   }
 
-  async getBy(criteria: Criteria): Promise<Driver[]> {
-    const filter = criteria.filter.value as DriverFilter
+  async getAvailablesNearestDrivers({
+    latitude,
+    longitude,
+    maxDistanceInMeters,
+    limit,
+  }: {
+    latitude?: number;
+    longitude?: number;
+    maxDistanceInMeters: number;
+    limit: number;
+  }): Promise<Driver[]> {
+    const filterBuilder = new DriverGetterFilterBuilder().available();
+    if (isFinite(Number(latitude)) && isFinite(Number(longitude))) {
+      filterBuilder
+        .nearestTo(Number(latitude), Number(longitude))
+        .maxDistance(maxDistanceInMeters)
+    }
+    const filter = filterBuilder.value as DriverFilter
     if (!filter.nearest) {
-      const data = await DriverModel.find(filter).limit(criteria.limit).lean();
+      const data = await DriverModel.find(filter).limit(limit).lean();
       return data.map((item) => new Driver({
         ...item,
         location: new Location({
@@ -34,7 +49,7 @@ export class DriverMongooseRepository implements DriverRepository {
       }))
     }
 
-    const { nearest, maxDistanceInMeters, ...filterWithoutNearest } = filter;
+    const { nearest, maxDistanceInMeters: _maxDistanceInMeters, ...filterWithoutNearest } = filter;
     const data = await DriverModel.find({
       ...filterWithoutNearest,
       coordinates: {
@@ -43,11 +58,11 @@ export class DriverMongooseRepository implements DriverRepository {
             type: "Point",
             coordinates: [nearest.longitude, nearest.latitude]
           },
-          $maxDistance: maxDistanceInMeters || 3000
+          $maxDistance: _maxDistanceInMeters || 3000
         }
       }
     })
-      .limit(criteria.limit)
+      .limit(limit)
       .lean();
 
     return data.map((item) => new Driver({
@@ -58,6 +73,7 @@ export class DriverMongooseRepository implements DriverRepository {
       })
     }))
   }
+
   async find(id: string): Promise<Driver | null> {
     const data = await DriverModel.findOne({ id }).lean();
     if (!data) { return null }
