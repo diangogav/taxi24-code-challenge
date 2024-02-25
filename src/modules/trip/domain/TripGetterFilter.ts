@@ -5,7 +5,7 @@ export type TripFilter = {
   passengerId: string;
 }
 
-export class TripGetterFilter implements Filter {
+export class TripGetterFilter  {
   private filter: Partial<TripFilter> = {}
 
   status(status: string): TripGetterFilter {

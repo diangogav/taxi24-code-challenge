@@ -1,11 +1,40 @@
-import { Filter } from "./Filter";
+import { InvalidArgumentError } from "../../errors/domain/InvalidArgumentError";
+import { FiltersPrimitives } from "./Filter";
+import { Filters } from "./Filters";
+import { Order } from "./Order";
 
 export class Criteria {
-  readonly filter: Filter;
-  readonly limit: number;
+	constructor(
+		public readonly filters: Filters,
+		public readonly order: Order,
+		public readonly pageSize: number | null,
+		public readonly pageNumber: number | null,
+	) {
+		if (pageNumber !== null && pageSize === null) {
+			throw new InvalidArgumentError("Page size is required when page number is defined");
+		}
+	}
 
-  constructor({ filter, limit }: { filter: Filter, limit?: number }) {
-    this.filter = filter;
-    this.limit = limit || 10
-  }
+	static fromPrimitives(
+		filters: FiltersPrimitives[],
+		orderBy: string | null,
+		orderType: string | null,
+		pageSize: number | null,
+		pageNumber: number | null,
+	): Criteria {
+		return new Criteria(
+			Filters.fromPrimitives(filters),
+			Order.fromPrimitives(orderBy, orderType),
+			pageSize,
+			pageNumber,
+		);
+	}
+
+	hasOrder(): boolean {
+		return !this.order.isNone();
+	}
+
+	hasFilters(): boolean {
+		return !this.filters.isEmpty();
+	}
 }
